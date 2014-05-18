@@ -229,7 +229,9 @@ module.exports = function (grunt) {
     // The following *-min tasks produce minified files in the dist folder
     cssmin: {
       options: {
-        root: '<%= yeoman.app %>'
+        // Messes up the glyph icon URLs.
+        // See https://github.com/yeoman/generator-angular/issues/645
+        // root: '<%= yeoman.app %>'
       }
     },
 
@@ -307,7 +309,8 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
-            'fonts/*'
+            'fonts/*',
+            'bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*.*'
           ]
         }, {
           expand: true,
