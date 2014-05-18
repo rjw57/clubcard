@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('clubcardApp')
-  .controller('MainCtrl', function($scope, $window) {
+  .controller('MainCtrl', function($scope, $window, $modal) {
     var main = this;
+
+    $scope.accounts = [];
 
     // Use localstorage if available
     if($window.localStorage && $window.localStorage.getItem) {
@@ -10,10 +12,6 @@ angular.module('clubcardApp')
       if(storedAccounts) {
         $scope.accounts = angular.fromJson(storedAccounts);
       }
-    }
-
-    if(!$scope.accounts) {
-      $scope.accounts = {};
     }
 
     $scope.$watch('accounts', function(newVal) {
@@ -26,8 +24,21 @@ angular.module('clubcardApp')
       }
     }, true);
 
-    main.removeAccount = function(account) {
-      delete $scope.accounts[account.id];
+    main.openAddAccountModal = function() {
+      $modal.open({
+        templateUrl: 'addAccountModalContent.html',
+      }).result.then(function(account) {
+        main.addAccount(account);
+      });
+    };
+
+    main.removeAccount = function(a) {
+      var newAccounts = [];
+      angular.forEach($scope.accounts, function(account) {
+        if(account.id === a.id) { return; }
+        newAccounts.push(account);
+      });
+      $scope.accounts = newAccounts;
     };
 
     main.addAccount = function(account) {
@@ -44,6 +55,6 @@ angular.module('clubcardApp')
         newAccount.code = '979' + newAccount.code.substr(5);
       }
 
-      $scope.accounts[id] = newAccount;
+      $scope.accounts.push(newAccount);
     };
   });

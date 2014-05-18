@@ -1,39 +1,3 @@
-<div class="modal fade" id="addAccountModal">
-  <div class="modal-dialog">
-    <form class="form" name="form" ng-controller="AccountFormCtrl as ctrl" novalidate>
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close"
-              data-dismiss="modal" aria-hidden="true">
-            &times;
-          </button>
-          <h4 class="modal-title">Add a new account</h4>
-        </div>
-        <div class="modal-body">
-          <fieldset class="form-group" ng-class="ctrl.controlClasses(form.name)">
-            <label class="control-label" for="name">Account name</label>
-            <input name="name" ng-model="account.name" type="text" class="form-control"
-              placeholder="A. N. Other" required>
-          </fieldset>
-          <fieldset class="form-group" ng-class="ctrl.controlClasses(form.number)">
-            <label class="control-label" for="number">Account number</label>
-            <input name="number" ng-model="account.number" type="text" class="form-control"
-              placeholder="634000000000000000" required
-              ng-pattern="/^63400[0-9]{13}$/" ng-minlength="18" ng-maxlength="18">
-          </fieldset>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" type="submit"
-              ng-click="$('#addAccountModal').modal('hide'); main.addAccount(account); reset(); form.$setPristine()"
-              ng-disabled="form.$invalid">
-            Add account
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
 <section class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -43,16 +7,15 @@
 </section>
 
 <section class="container">
-  <p ng-hide="accounts &amp;&amp; !angular.equals(accounts, {})" class="text-muted text-center">
+  <p ng-hide="accounts && (accounts.length > 0)" class="text-muted text-center">
     <strong>No accounts</strong>
   </p>
-  <ul class="media-list list-group" ng-show="accounts &amp;&amp; !angular.equals(accounts, {})">
-    <li ng-repeat="account in accounts | orderBy : -account.createdDate" class="list-group-item">
+  <ul class="media-list list-group">
+    <li ng-repeat="account in accounts | orderBy : account.createdDate" class="list-group-item">
       <account account="account" onremove="main.removeAccount"></account>
     </li>
   </ul>
-  <button class="btn btn-larget btn-primary pull-right"
-      data-toggle="modal" data-target="#addAccountModal">
+  <button class="btn btn-larget btn-primary pull-right" ng-click="main.openAddAccountModal()">
     <span class="glyphicon glyphicon-plus"></span> Add account
   </button>
 </section>
